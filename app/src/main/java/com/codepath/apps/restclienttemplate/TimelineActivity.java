@@ -4,21 +4,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
-import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import okhttp3.Headers;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -33,6 +32,8 @@ public class TimelineActivity extends AppCompatActivity {
         binding = ActivityTimelineBinding.inflate(getLayoutInflater());
         View rootView = binding.getRoot();
         setContentView(rootView);
+
+        setSupportActionBar(binding.timelineToolbar);
 
         client = TwitterApplication.getRestClient(this);
         tweets = new ArrayList<>();
@@ -79,5 +80,29 @@ public class TimelineActivity extends AppCompatActivity {
         DividerItemDecoration divider = new DividerItemDecoration(binding.timelineRecyclerview.getContext(),
                 layoutManager.getOrientation());
         binding.timelineRecyclerview.addItemDecoration(divider);
+    }
+
+    private void logout(){
+        client.clearAccessToken();
+        this.finish();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_logout:
+                logout();
+                return true;
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.timeline_menu, menu);
+        return true;
     }
 }
