@@ -44,10 +44,10 @@ public class TwitterClient extends OAuthBaseClient {
 						context.getString(R.string.intent_scheme), context.getPackageName(), FALLBACK_URL));
 	}
 
-	public void getHomeTimeline(JsonHttpResponseHandler handler) {
+	public void getHomeTimeline(int page, JsonHttpResponseHandler handler) {
 		String apiUrl = getApiUrl("statuses/home_timeline.json");
 		RequestParams params = new RequestParams();
-//		params.put("page", String.valueOf(page));
+		params.put("page", String.valueOf(page));
 		client.get(apiUrl, params, handler);
 	}
 
