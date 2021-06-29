@@ -11,5 +11,6 @@
     <string name="compose_tweet">Compose Tweet</string>
     <string name="what_s_happening">What\'s happening?</string>
     <string name="_0_280_characters">0/280 characters</string>
+    <string name="tweet_optional_image">Tweet Optional Image</string>
 
 </resources>

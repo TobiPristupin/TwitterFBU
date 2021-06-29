@@ -19,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+
 
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
@@ -68,6 +70,20 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             binding.userAt.setText(String.format("@%s", user.getScreenName()));
             binding.timeCreated.setText(DateUtils.getRelativeTimeAgo(tweet.getCreatedAt()));
             binding.tweetText.setText(tweet.getBody());
+
+            if (!tweet.imageUrls.isEmpty()){
+                binding.previewImage.setVisibility(View.VISIBLE);
+
+                int radius = 60;
+                int margin = 20;
+                Glide.with(context)
+                        .load(tweet.imageUrls.get(0))
+                        .centerCrop()
+                        .transform(new RoundedCornersTransformation(radius, margin))
+                        .into(binding.previewImage);
+            } else {
+                binding.previewImage.setVisibility(View.GONE);
+            }
         }
     }
 }

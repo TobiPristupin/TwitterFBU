@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:maxHeight="250dp"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:paddingBottom="10dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profile_image"
@@ -19,16 +19,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
         tools:srcCompat="@tools:sample/avatars" />
-
-<!--    <ImageView-->
-<!--        android:id="@+id/profile_image"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="80dp"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginTop="16dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        tools:srcCompat="@tools:sample/avatars" />-->
 
     <TextView
         android:id="@+id/user_handle"
@@ -88,12 +78,26 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:textColor="#000000"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/preview_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/user_handle"
         app:layout_constraintTop_toBottomOf="@+id/user_handle"
         tools:text="Tweet con los pibes, hola habla mio lessi. Todo bien, acabamos de perder la final de una copa internacional de nuevo, que cuentan??? rtaaaaaaadsfhdiufhdfgfgf" />
+
+    <ImageView
+        android:id="@+id/preview_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/tweet_optional_image"
+        android:maxHeight="150dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tweet_text"
+        app:layout_constraintTop_toBottomOf="@+id/tweet_text"
+        tools:srcCompat="@tools:sample/backgrounds/scenic"
+        tools:visibility="visible" />
 </androidx.constraintlayout.widget.ConstraintLayout>
