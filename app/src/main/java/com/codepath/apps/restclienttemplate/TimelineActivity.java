@@ -1,9 +1,11 @@
 package com.codepath.apps.restclienttemplate;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,16 +17,19 @@ import com.codepath.apps.restclienttemplate.models.Tweet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    ActivityTimelineBinding binding;
-    TwitterClient client;
-    TweetAdapter adapter;
-    List<Tweet> tweets;
+    private ActivityTimelineBinding binding;
+    private TwitterClient client;
+    private TweetAdapter adapter;
+    private List<Tweet> tweets;
+    private static final int REQUEST_CODE = 999;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +78,11 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void initViews() {
+        initRecyclerView();
+        initComposeFab();
+    }
+
+    private void initRecyclerView() {
         adapter = new TweetAdapter(tweets, this);
         binding.timelineRecyclerview.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -82,9 +92,30 @@ public class TimelineActivity extends AppCompatActivity {
         binding.timelineRecyclerview.addItemDecoration(divider);
     }
 
+    private void initComposeFab(){
+        binding.composeTweetFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(TimelineActivity.this, ComposeTweetActivity.class);
+                startActivityForResult(i, REQUEST_CODE);
+            }
+        });
+    }
+
     private void logout(){
         client.clearAccessToken();
         this.finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
+            Tweet newTweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet"));
+            tweets.add(0, newTweet);
+            adapter.notifyItemInserted(0);
+            binding.timelineRecyclerview.smoothScrollToPosition(0);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

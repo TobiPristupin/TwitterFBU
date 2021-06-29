@@ -2,13 +2,19 @@ package com.codepath.apps.restclienttemplate.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
+@Parcel
 public class User {
 
-    private int id;
-    private String name;
-    private String screenName;
-    private String profileImageUrl;
+    public int id;
+    public String name;
+    public String screenName;
+    public String profileImageUrl;
+
+    public User(){
+
+    }
 
     public User(String name, String handle, String profileImageUrl, int id) {
         this.name = name;

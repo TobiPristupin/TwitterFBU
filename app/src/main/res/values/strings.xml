@@ -8,5 +8,8 @@
     <string name="bullet_point">•</string>
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
+    <string name="compose_tweet">Compose Tweet</string>
+    <string name="what_s_happening">What\'s happening?</string>
+    <string name="_0_280_characters">0/280 characters</string>
 
 </resources>

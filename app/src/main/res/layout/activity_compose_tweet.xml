@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TimelineActivity">
+    tools:context=".ComposeTweetActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/timeline_toolbar"
+        android:id="@+id/compose_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary"
@@ -16,29 +16,36 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_baseline_close_24"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextColor="@android:color/white"/>
+        app:title="Compose"
+        app:titleTextColor="@android:color/white" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/timeline_recyclerview"
+    <EditText
+        android:id="@+id/compose_tweet_edittext"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:autofillHints="no"
+        android:gravity="start"
+        android:hint="@string/what_s_happening"
+        android:inputType="text"
+        app:layout_constraintBottom_toTopOf="@+id/character_count"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeline_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/compose_toolbar"
+        android:background="@android:color/transparent"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/compose_tweet_fab"
+    <TextView
+        android:id="@+id/character_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="24dp"
+        android:text="@string/_0_280_characters"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:src="@drawable/ic_vector_compose_white"
-        app:tint="@android:color/white"
-        android:contentDescription="@string/compose_tweet"
-        android:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,16 +3,22 @@ package com.codepath.apps.restclienttemplate.models;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class Tweet {
 
-    private String body;
-    private String createdAt;
-    private User user;
-    private int id;
+    public String body;
+    public String createdAt;
+    public User user;
+    public int id;
+
+    public Tweet(){
+
+    }
 
     public Tweet(String body, String createdAt, User user, int id) {
         this.body = body;
