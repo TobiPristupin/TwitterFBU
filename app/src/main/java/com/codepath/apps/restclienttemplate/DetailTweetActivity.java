@@ -73,6 +73,7 @@ public class DetailTweetActivity extends AppCompatActivity {
         binding.detailFavoriteCount.setText(String.valueOf(tweet.favoriteCount));
 
         binding.favoriteButton.setOnClickListener(view -> likeTweet());
+        binding.retweetButton.setOnClickListener(view -> retweet());
     }
 
     private void likeTweet(){
@@ -81,16 +82,17 @@ public class DetailTweetActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
                 binding.detailFavoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                Toast.makeText(DetailTweetActivity.this, "Liked tweet", Toast.LENGTH_LONG).show();
+                Toast.makeText(DetailTweetActivity.this, "Liked tweet", Toast.LENGTH_SHORT).show();
                 tweetDao.update(tweet);
                 Log.i(TAG, "Successfully liked");
             }
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                int alreadyLikedErrorCode = 139;
                 try {
                     JSONObject json = new JSONObject(response);
-                    if (json.has("errors") && json.getJSONArray("errors").getJSONObject(0).getInt("code") == 139){
+                    if (json.has("errors") && json.getJSONArray("errors").getJSONObject(0).getInt("code") == alreadyLikedErrorCode){
                         unlikeTweet();
                         return;
                     }
@@ -110,9 +112,56 @@ public class DetailTweetActivity extends AppCompatActivity {
             public void onSuccess(int statusCode, Headers headers, JSON json) {
                 tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
                 binding.detailFavoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
-                Toast.makeText(DetailTweetActivity.this, "Unliked tweet", Toast.LENGTH_LONG).show();
+                Toast.makeText(DetailTweetActivity.this, "Unliked tweet", Toast.LENGTH_SHORT).show();
                 tweetDao.update(tweet);
                 Log.i(TAG, "Successfully unliked");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.w(TAG, response);
+            }
+        });
+    }
+
+    private void retweet() {
+        client.retweetTweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                tweet.setRetweetCount(tweet.getRetweetCount() + 1);
+                binding.detailRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+                Toast.makeText(DetailTweetActivity.this, "Retweeted", Toast.LENGTH_SHORT).show();
+                tweetDao.update(tweet);
+                Log.i(TAG, "Successfully retweeted");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                int alreadyRetweetedErrorCode = 327;
+                try {
+                    JSONObject json = new JSONObject(response);
+                    if (json.has("errors") && json.getJSONArray("errors").getJSONObject(0).getInt("code") == alreadyRetweetedErrorCode){
+                        unRetweet();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Log.w(TAG, response);
+            }
+        });
+    }
+
+    private void unRetweet(){
+        client.unRetweetTweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                tweet.setRetweetCount(tweet.getRetweetCount() - 1);
+                binding.detailRetweetCount.setText(String.valueOf(tweet.getRetweetCount()));
+                Toast.makeText(DetailTweetActivity.this, "Unretweeted", Toast.LENGTH_SHORT).show();
+                tweetDao.update(tweet);
+                Log.i(TAG, "Successfully unretweeted");
             }
 
             @Override
