@@ -1,7 +1,9 @@
-package com.codepath.apps.restclienttemplate;
+package com.codepath.apps.restclienttemplate.models;
 
 import android.content.Context;
 
+import com.codepath.apps.restclienttemplate.BuildConfig;
+import com.codepath.apps.restclienttemplate.R;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.asynchttpclient.RequestParams;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
@@ -61,6 +63,13 @@ public class TwitterClient extends OAuthBaseClient {
 
 	public void likeTweet(Tweet tweet, JsonHttpResponseHandler handler){
 		String apiUrl = getApiUrl("favorites/create.json");
+		RequestParams params = new RequestParams();
+		params.put("id", tweet.getId());
+		client.post(apiUrl, params, "", handler);
+	}
+
+	public void unlikeTweet(Tweet tweet, JsonHttpResponseHandler handler){
+		String apiUrl = getApiUrl("favorites/destroy.json");
 		RequestParams params = new RequestParams();
 		params.put("id", tweet.getId());
 		client.post(apiUrl, params, "", handler);

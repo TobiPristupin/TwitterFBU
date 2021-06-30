@@ -6,14 +6,21 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.databinding.ActivityDetailTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDao;
+import com.codepath.apps.restclienttemplate.models.TweetDatabaseProvider;
+import com.codepath.apps.restclienttemplate.models.TwitterApplication;
+import com.codepath.apps.restclienttemplate.models.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.utils.DateUtils;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.parceler.Parcels;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -24,6 +31,7 @@ public class DetailTweetActivity extends AppCompatActivity {
     ActivityDetailTweetBinding binding;
     TwitterClient client;
     Tweet tweet;
+    TweetDao tweetDao;
     private static final String TAG = "DetailTweetActivity";
 
     @Override
@@ -37,6 +45,7 @@ public class DetailTweetActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
         client = TwitterApplication.getRestClient(this);
+        tweetDao = TweetDatabaseProvider.getInstance(this).tweetDao();
 
         initViews();
     }
@@ -70,7 +79,40 @@ public class DetailTweetActivity extends AppCompatActivity {
         client.likeTweet(tweet, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                tweet.setFavoriteCount(tweet.getFavoriteCount() + 1);
+                binding.detailFavoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
+                Toast.makeText(DetailTweetActivity.this, "Liked tweet", Toast.LENGTH_LONG).show();
+                tweetDao.update(tweet);
                 Log.i(TAG, "Successfully liked");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                try {
+                    JSONObject json = new JSONObject(response);
+                    if (json.has("errors") && json.getJSONArray("errors").getJSONObject(0).getInt("code") == 139){
+                        unlikeTweet();
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Log.w(TAG, response);
+//                {"errors":[{"code":139,"message":"You have already favorited this status."}]}
+            }
+        });
+    }
+
+    private void unlikeTweet(){
+        client.unlikeTweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                tweet.setFavoriteCount(tweet.getFavoriteCount() - 1);
+                binding.detailFavoriteCount.setText(String.valueOf(tweet.getFavoriteCount()));
+                Toast.makeText(DetailTweetActivity.this, "Unliked tweet", Toast.LENGTH_LONG).show();
+                tweetDao.update(tweet);
+                Log.i(TAG, "Successfully unliked");
             }
 
             @Override

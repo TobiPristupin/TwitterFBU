@@ -4,7 +4,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,11 +15,11 @@ import android.view.View;
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.TweetDao;
-import com.codepath.apps.restclienttemplate.models.TweetDatabase;
 import com.codepath.apps.restclienttemplate.models.TweetDatabaseProvider;
+import com.codepath.apps.restclienttemplate.models.TwitterApplication;
+import com.codepath.apps.restclienttemplate.models.TwitterClient;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
@@ -54,25 +53,23 @@ public class TimelineActivity extends AppCompatActivity {
 
         initViews();
 
-        if (!isCacheEmpty()){
-            populateHomeTimelineFromCache();
-        } else {
-            populateHomeTimelineFromAPI(0);
-        }
+        fetchFromApiToCache(0);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        populateHomeTimelineFromCache();
     }
 
     //Fetches tweets from API, displays them on the timeline, and caches the results in room db
-    private void populateHomeTimelineFromAPI(int page) {
+    private void fetchFromApiToCache(int page) {
         client.getHomeTimeline(page, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JsonHttpResponseHandler.JSON json) {
-                tweets.clear();
                 try {
-                    tweets.addAll(Tweet.fromJsonArray(json.jsonArray));
-                    binding.timelineProgressBar.setVisibility(View.GONE);
-                    adapter.notifyDataSetChanged();
-                    binding.swipeRefreshLayout.setRefreshing(false);
-                    updateCache();
+                    tweetDao.insertAll(Tweet.fromJsonArray(json.jsonArray));
+                    populateHomeTimelineFromCache();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -80,7 +77,6 @@ public class TimelineActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                binding.timelineProgressBar.setVisibility(View.GONE);
                 System.out.println(throwable.toString());
             }
         });
@@ -96,16 +92,9 @@ public class TimelineActivity extends AppCompatActivity {
 //        }
     }
 
-    private void updateCache(){
-        tweetDao.insertAll(tweets);
-    }
-
-    private boolean isCacheEmpty(){
-        return tweetDao.getNumberOfRows() == 0;
-    }
-
     private void populateHomeTimelineFromCache(){
         binding.timelineProgressBar.setVisibility(View.GONE);
+        binding.swipeRefreshLayout.setRefreshing(false);
         tweets.clear();
         tweets.addAll(tweetDao.getAll());
         adapter.notifyDataSetChanged();
@@ -136,7 +125,7 @@ public class TimelineActivity extends AppCompatActivity {
 
     private void initSwipeRefresh(){
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            populateHomeTimelineFromAPI(0);
+            fetchFromApiToCache(0);
         });
     }
 
