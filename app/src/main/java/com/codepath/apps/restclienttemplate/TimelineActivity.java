@@ -15,6 +15,9 @@ import android.view.View;
 
 import com.codepath.apps.restclienttemplate.databinding.ActivityTimelineBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
+import com.codepath.apps.restclienttemplate.models.TweetDao;
+import com.codepath.apps.restclienttemplate.models.TweetDatabase;
+import com.codepath.apps.restclienttemplate.models.TweetDatabaseProvider;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -32,6 +35,7 @@ public class TimelineActivity extends AppCompatActivity {
     private TwitterClient client;
     private TweetAdapter adapter;
     private List<Tweet> tweets;
+    private TweetDao tweetDao;
     private static final int REQUEST_CODE = 999;
 
 
@@ -46,12 +50,19 @@ public class TimelineActivity extends AppCompatActivity {
 
         client = TwitterApplication.getRestClient(this);
         tweets = new ArrayList<>();
+        tweetDao = TweetDatabaseProvider.getInstance(this).tweetDao();
 
         initViews();
-        populateHomeTimeline(0);
+
+        if (!isCacheEmpty()){
+            populateHomeTimelineFromCache();
+        } else {
+            populateHomeTimelineFromAPI(0);
+        }
     }
 
-    private void populateHomeTimeline(int page) {
+    //Fetches tweets from API, displays them on the timeline, and caches the results in room db
+    private void populateHomeTimelineFromAPI(int page) {
         client.getHomeTimeline(page, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JsonHttpResponseHandler.JSON json) {
@@ -61,6 +72,7 @@ public class TimelineActivity extends AppCompatActivity {
                     binding.timelineProgressBar.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
                     binding.swipeRefreshLayout.setRefreshing(false);
+                    updateCache();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -82,8 +94,21 @@ public class TimelineActivity extends AppCompatActivity {
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
+    }
 
+    private void updateCache(){
+        tweetDao.insertAll(tweets);
+    }
 
+    private boolean isCacheEmpty(){
+        return tweetDao.getNumberOfRows() == 0;
+    }
+
+    private void populateHomeTimelineFromCache(){
+        binding.timelineProgressBar.setVisibility(View.GONE);
+        tweets.clear();
+        tweets.addAll(tweetDao.getAll());
+        adapter.notifyDataSetChanged();
     }
 
     private void initViews() {
@@ -110,11 +135,8 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void initSwipeRefresh(){
-        binding.swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                populateHomeTimeline(0);
-            }
+        binding.swipeRefreshLayout.setOnRefreshListener(() -> {
+            populateHomeTimelineFromAPI(0);
         });
     }
 

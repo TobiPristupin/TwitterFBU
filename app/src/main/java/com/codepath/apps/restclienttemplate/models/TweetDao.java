@@ -2,6 +2,7 @@ package com.codepath.apps.restclienttemplate.models;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
@@ -13,7 +14,7 @@ public interface TweetDao {
     @Query("SELECT * FROM tweets")
     List<Tweet> getAll();
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<Tweet> tweets);
 
     @Update
@@ -21,4 +22,7 @@ public interface TweetDao {
 
     @Query("DELETE FROM tweets")
     public void deleteAll();
+
+    @Query("SELECT COUNT(id) FROM tweets")
+    int getNumberOfRows();
 }

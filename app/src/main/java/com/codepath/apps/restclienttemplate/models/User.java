@@ -1,5 +1,7 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import androidx.room.ColumnInfo;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
@@ -7,6 +9,7 @@ import org.parceler.Parcel;
 @Parcel
 public class User {
 
+    @ColumnInfo(name = "user_id")
     public int id;
     public String name;
     public String screenName;

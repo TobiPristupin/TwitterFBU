@@ -1,5 +1,8 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -17,11 +20,13 @@ public class Tweet {
 
     public String body;
     public String createdAt;
+    @Embedded
     public User user;
-    @PrimaryKey
+    @PrimaryKey @NonNull
     public String id;
     public int retweetCount;
     public int favoriteCount;
+
     public List<String> imageUrls;
 
     public Tweet(){
