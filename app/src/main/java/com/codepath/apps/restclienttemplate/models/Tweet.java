@@ -1,5 +1,8 @@
 package com.codepath.apps.restclienttemplate.models;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,12 +11,14 @@ import org.parceler.Parcel;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity(tableName = "tweets")
 @Parcel
 public class Tweet {
 
     public String body;
     public String createdAt;
     public User user;
+    @PrimaryKey
     public String id;
     public int retweetCount;
     public int favoriteCount;
