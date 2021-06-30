@@ -2,6 +2,7 @@ additional features:
     viewbinding
     UI design
     view automatically shifts up when typing
+   
 
 TODO:
     pfp are low res

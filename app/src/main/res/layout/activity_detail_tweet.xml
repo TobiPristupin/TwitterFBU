@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DetailTweetActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/detail_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Tweet"
+        app:titleTextColor="@android:color/white" />
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/detail_profile_image"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_toolbar"
+        app:shapeAppearanceOverlay="@style/roundedImageViewRounded"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/detail_user_handle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/detail_profile_image"
+        app:layout_constraintTop_toTopOf="@+id/detail_profile_image"
+        tools:text="Mio Lessi" />
+
+
+    <TextView
+        android:id="@+id/detail_user_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="@+id/detail_user_handle"
+        app:layout_constraintTop_toBottomOf="@+id/detail_user_handle"
+        tools:text="\@mio_lessi" />
+
+    <TextView
+        android:id="@+id/detail_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:textColor="@android:color/black"
+        android:textSize="26sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_profile_image"
+        tools:text="Tweet con los pibes, hola habla mio lessi. Todo bien, acabamos de perder la final de una copa internacional de nuevo, que cuentan??? rtaaaaaaadsfhdiufhdfgfgf" />
+
+    <ImageView
+        android:id="@+id/detail_preview_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/tweet_optional_image"
+        android:maxHeight="250dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_text"
+        tools:srcCompat="@tools:sample/backgrounds/scenic"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/detail_created_at"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_preview_image"
+        tools:text="23:30 • 28 Jun 21" />
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_created_at" />
+
+    <TextView
+        android:id="@+id/detail_retweet_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view"
+        tools:text="64" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/retweets"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_retweet_count"
+        app:layout_constraintStart_toEndOf="@+id/detail_retweet_count"
+        app:layout_constraintTop_toTopOf="@+id/detail_retweet_count" />
+
+    <TextView
+        android:id="@+id/detail_favorite_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="2dp"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toTopOf="@+id/textView5"
+        tools:text="345" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:text="@string/favorites"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_favorite_count"
+        app:layout_constraintStart_toEndOf="@+id/detail_favorite_count"
+        app:layout_constraintTop_toTopOf="@+id/detail_favorite_count" />
+
+    <View
+        android:id="@+id/vie2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_retweet_count" />
+
+    <ImageView
+        android:id="@+id/retweet_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/reply_button"
+        app:layout_constraintEnd_toStartOf="@+id/favorite_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/reply_button"
+        app:layout_constraintTop_toTopOf="@+id/reply_button"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
+
+    <ImageView
+        android:id="@+id/favorite_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintBottom_toBottomOf="@+id/retweet_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/retweet_button"
+        app:layout_constraintTop_toTopOf="@+id/retweet_button"
+        app:srcCompat="@drawable/ic_vector_heart_stroke"
+        android:background="?attr/selectableItemBackgroundBorderless"/>
+
+    <ImageView
+        android:id="@+id/reply_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toStartOf="@+id/retweet_button"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/vie2"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:srcCompat="@drawable/ic_vector_heart_stroke"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

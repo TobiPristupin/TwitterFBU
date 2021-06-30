@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 public class DateUtils {
@@ -14,6 +15,22 @@ public class DateUtils {
     private static final int MINUTE_MILLIS = 60 * SECOND_MILLIS;
     private static final int HOUR_MILLIS = 60 * MINUTE_MILLIS;
     private static final int DAY_MILLIS = 24 * HOUR_MILLIS;
+
+    public static String getFormattedDate(String rawJsonDate) {
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+
+        try {
+            Date date = sf.parse(rawJsonDate);
+            return date.toLocaleString();
+        } catch (ParseException e) {
+            Log.i(TAG, "getFormattedDate failed");
+            e.printStackTrace();
+        }
+
+        return  "-1";
+    }
 
     public static String getRelativeTimeAgo(String rawJsonDate) {
         String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";

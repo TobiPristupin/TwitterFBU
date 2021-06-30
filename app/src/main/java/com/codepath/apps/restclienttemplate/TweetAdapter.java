@@ -30,10 +30,12 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     private List<Tweet> tweets;
     private Context context;
+    onTweetClickListener clickListener;
 
-    public TweetAdapter(List<Tweet> tweets, Context context) {
+    public TweetAdapter(List<Tweet> tweets, Context context, onTweetClickListener clickListener) {
         this.tweets = tweets;
         this.context = context;
+        this.clickListener = clickListener;
     }
 
     @NonNull
@@ -74,8 +76,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             if (!tweet.imageUrls.isEmpty()){
                 binding.previewImage.setVisibility(View.VISIBLE);
 
-                int radius = 60;
-                int margin = 20;
+                int radius = 80;
+                int margin = 30;
                 Glide.with(context)
                         .load(tweet.imageUrls.get(0))
                         .centerCrop()
@@ -84,6 +86,15 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             } else {
                 binding.previewImage.setVisibility(View.GONE);
             }
+
+            binding.tweetItemRoot.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onClick(getAdapterPosition());
+                }
+            });
+
+
         }
     }
 }

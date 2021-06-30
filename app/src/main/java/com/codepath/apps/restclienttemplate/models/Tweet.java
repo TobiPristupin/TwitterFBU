@@ -15,24 +15,26 @@ public class Tweet {
     public String createdAt;
     public User user;
     public int id;
+    public int retweetCount;
+    public int favoriteCount;
     public List<String> imageUrls;
 
     public Tweet(){
 
     }
 
-    public Tweet(String body, String createdAt, User user, int id, List<String> imageUrls) {
+    public Tweet(String body, String createdAt, User user, int id, List<String> imageUrls, int retweetCount, int favoriteCount) {
         this.body = body;
         this.createdAt = createdAt;
         this.user = user;
         this.id = id;
         this.imageUrls = imageUrls;
+        this.retweetCount = retweetCount;
+        this.favoriteCount = favoriteCount;
     }
 
     public static Tweet fromJson(JSONObject json) throws JSONException {
         List<String> imageUrls = new ArrayList<>();
-        JSONObject entities = json.optJSONObject("extended_entities");
-
         if (json.has("extended_entities") && json.getJSONObject("extended_entities").has("media")) {
             JSONArray mediaArray = json.getJSONObject("extended_entities").getJSONArray("media");
             for (int i = 0; i < mediaArray.length(); i++) {
@@ -45,7 +47,9 @@ public class Tweet {
                 json.getString("created_at"),
                 User.fromJson(json.getJSONObject("user")),
                 json.getInt("id"),
-                imageUrls
+                imageUrls,
+                json.getInt("retweet_count"),
+                json.getInt("favorite_count")
         );
     }
 
