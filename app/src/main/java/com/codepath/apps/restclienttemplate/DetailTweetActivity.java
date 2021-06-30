@@ -3,6 +3,7 @@ package com.codepath.apps.restclienttemplate;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -11,15 +12,19 @@ import com.codepath.apps.restclienttemplate.databinding.ActivityDetailTweetBindi
 import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.apps.restclienttemplate.utils.DateUtils;
+import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.parceler.Parcels;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import okhttp3.Headers;
 
 public class DetailTweetActivity extends AppCompatActivity {
 
     ActivityDetailTweetBinding binding;
+    TwitterClient client;
     Tweet tweet;
+    private static final String TAG = "DetailTweetActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class DetailTweetActivity extends AppCompatActivity {
         setSupportActionBar(binding.detailToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         tweet = (Tweet) Parcels.unwrap(getIntent().getParcelableExtra("tweet"));
+        client = TwitterApplication.getRestClient(this);
 
         initViews();
     }
@@ -56,6 +62,22 @@ public class DetailTweetActivity extends AppCompatActivity {
 
         binding.detailRetweetCount.setText(String.valueOf(tweet.retweetCount));
         binding.detailFavoriteCount.setText(String.valueOf(tweet.favoriteCount));
+
+        binding.favoriteButton.setOnClickListener(view -> likeTweet());
+    }
+
+    private void likeTweet(){
+        client.likeTweet(tweet, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "Successfully liked");
+            }
+
+            @Override
+            public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
+                Log.w(TAG, response);
+            }
+        });
     }
 
 

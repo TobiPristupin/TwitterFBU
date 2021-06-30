@@ -14,7 +14,7 @@ public class Tweet {
     public String body;
     public String createdAt;
     public User user;
-    public int id;
+    public String id;
     public int retweetCount;
     public int favoriteCount;
     public List<String> imageUrls;
@@ -23,7 +23,7 @@ public class Tweet {
 
     }
 
-    public Tweet(String body, String createdAt, User user, int id, List<String> imageUrls, int retweetCount, int favoriteCount) {
+    public Tweet(String body, String createdAt, User user, String id, List<String> imageUrls, int retweetCount, int favoriteCount) {
         this.body = body;
         this.createdAt = createdAt;
         this.user = user;
@@ -46,7 +46,7 @@ public class Tweet {
                 json.getString("text"),
                 json.getString("created_at"),
                 User.fromJson(json.getJSONObject("user")),
-                json.getInt("id"),
+                json.getString("id_str"),
                 imageUrls,
                 json.getInt("retweet_count"),
                 json.getInt("favorite_count")
@@ -73,7 +73,7 @@ public class Tweet {
         return user;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 }
