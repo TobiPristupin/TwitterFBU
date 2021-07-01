@@ -25,12 +25,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
 
     interface onTweetClickListener {
         void onTweetClick(int position);
+
         void onProfileImageClick(int position);
     }
 
     private List<Tweet> tweets;
     private Context context;
-    onTweetClickListener clickListener;
+    private onTweetClickListener clickListener;
 
     public TweetAdapter(List<Tweet> tweets, Context context, onTweetClickListener clickListener) {
         this.tweets = tweets;
@@ -65,7 +66,7 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             binding = ItemTweetBinding.bind(itemView);
         }
 
-        private void bind(Tweet tweet){
+        private void bind(Tweet tweet) {
             User user = tweet.getUser();
             Glide.with(context).load(user.getProfileImageUrl()).into(binding.profileImage);
             binding.userHandle.setText(user.getName());
@@ -73,13 +74,13 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
             binding.timeCreated.setText(DateUtils.getRelativeTimeAgo(tweet.getCreatedAt()));
             binding.tweetText.setText(tweet.getBody());
 
-            if (!tweet.imageUrls.isEmpty()){
+            if (!tweet.getImageUrls().isEmpty()) {
                 binding.previewImage.setVisibility(View.VISIBLE);
 
                 int radius = 80;
                 int margin = 30;
                 Glide.with(context)
-                        .load(tweet.imageUrls.get(0))
+                        .load(tweet.getImageUrls().get(0))
                         .centerCrop()
                         .transform(new RoundedCornersTransformation(radius, margin))
                         .into(binding.previewImage);

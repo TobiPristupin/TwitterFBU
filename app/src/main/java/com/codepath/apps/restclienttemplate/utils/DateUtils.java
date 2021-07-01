@@ -29,7 +29,7 @@ public class DateUtils {
             e.printStackTrace();
         }
 
-        return  "-1";
+        return "-1";
     }
 
     public static String getRelativeTimeAgo(String rawJsonDate) {

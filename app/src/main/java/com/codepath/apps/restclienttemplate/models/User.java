@@ -2,9 +2,6 @@ package com.codepath.apps.restclienttemplate.models;
 
 import androidx.room.ColumnInfo;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,14 +14,14 @@ import java.util.List;
 public class User {
 
     @ColumnInfo(name = "user_id")
-    public String id;
-    public String name;
-    public String screenName;
-    public String profileImageUrl;
-    public String description;
+    private String id;
+    private String name;
+    private String screenName;
+    private String profileImageUrl;
+    private String description;
 
-    public User(){
-
+    public User() {
+        //empty constructor required for Parcel
     }
 
     public User(String name, String handle, String profileImageUrl, String id, String description) {
@@ -47,7 +44,7 @@ public class User {
 
     public static List<User> fromJsonArray(JSONArray array) throws JSONException {
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             users.add(User.fromJson(array.getJSONObject(i)));
         }
 

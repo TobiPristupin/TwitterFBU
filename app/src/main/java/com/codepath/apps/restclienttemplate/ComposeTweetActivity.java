@@ -1,16 +1,17 @@
 package com.codepath.apps.restclienttemplate;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.codepath.apps.restclienttemplate.databinding.ActivityComposeTweetBinding;
 import com.codepath.apps.restclienttemplate.models.Tweet;
@@ -25,8 +26,9 @@ import okhttp3.Headers;
 
 public class ComposeTweetActivity extends AppCompatActivity {
 
-    ActivityComposeTweetBinding binding;
-    TwitterClient client;
+    private ActivityComposeTweetBinding binding;
+    private TwitterClient client;
+    private static final String TAG = "ComposeTweetActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +43,12 @@ public class ComposeTweetActivity extends AppCompatActivity {
         initEditText();
     }
 
-    private void initToolbar(){
+    private void initToolbar() {
         setSupportActionBar(binding.composeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void initEditText(){
+    private void initEditText() {
         binding.composeTweetEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -58,29 +60,22 @@ public class ComposeTweetActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                String length = editable.length() + "/280 characters";
-                binding.characterCount.setText(length);
-//                if (editable.length() > 280){
-//                    binding.characterCount.setTextColor(Color.parseColor("#C70000"));
-//                }
+                String text = editable.length() + "/280 characters";
+                binding.characterCount.setText(text);
             }
         });
     }
 
-    private void saveTweet(){
+    private void saveTweet() {
         String tweet = binding.composeTweetEdittext.getText().toString();
-        if (tweet.length() == 0){
-            Toast.makeText(this, "Cannot post empty tweet", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (tweet.length() > 280){
-            Toast.makeText(this, "Tweet exceeds 280 characters", Toast.LENGTH_SHORT).show();
+        if (!tweetIsValid(tweet)) {
             return;
         }
 
         client.publishTweet(tweet, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
-                System.out.println(json);
+                Log.i(TAG, "Published tweet");
                 try {
                     Tweet published = Tweet.fromJson(json.jsonObject);
                     Intent intent = new Intent();
@@ -94,9 +89,21 @@ public class ComposeTweetActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                System.out.println(throwable);
+                Log.w(TAG, throwable);
             }
         });
+    }
+
+    private boolean tweetIsValid(String tweet) {
+        if (tweet.length() == 0) {
+            Toast.makeText(this, "Cannot post empty tweet", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (tweet.length() > 280) {
+            Toast.makeText(this, "Tweet exceeds 280 characters", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        return true;
     }
 
     @Override
@@ -108,7 +115,7 @@ public class ComposeTweetActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.action_save:
                 saveTweet();
                 return true;

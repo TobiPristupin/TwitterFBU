@@ -1,11 +1,11 @@
 package com.codepath.apps.restclienttemplate.models;
 
 import androidx.annotation.NonNull;
-import androidx.room.ColumnInfo;
 import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,24 +18,22 @@ import java.util.List;
 @Parcel
 public class Tweet {
 
-    public String body;
-    public String createdAt;
+    private String body;
+    private String createdAt;
     @Embedded
-    public User user;
-    @PrimaryKey @NonNull
-    public String id;
-    public int retweetCount;
-    public int favoriteCount;
+    private User user;
+    @PrimaryKey
+    @NonNull
+    private String id = "0";
+    private int retweetCount;
+    private int favoriteCount;
+    private List<String> imageUrls;
 
-    public List<String> imageUrls;
-
-    public boolean likedByUser;
-
-    public Tweet(){
-
+    public Tweet() {
+        //empty constructor required for Parcel
     }
 
-    public Tweet(String body, String createdAt, User user, String id, List<String> imageUrls, int retweetCount, int favoriteCount) {
+    public Tweet(String body, String createdAt, User user, @NotNull String id, List<String> imageUrls, int retweetCount, int favoriteCount) {
         this.body = body;
         this.createdAt = createdAt;
         this.user = user;
@@ -67,7 +65,7 @@ public class Tweet {
 
     public static List<Tweet> fromJsonArray(JSONArray array) throws JSONException {
         List<Tweet> tweets = new ArrayList<>();
-        for (int i = 0; i < array.length(); i++){
+        for (int i = 0; i < array.length(); i++) {
             tweets.add(Tweet.fromJson(array.getJSONObject(i)));
         }
         return tweets;
@@ -85,6 +83,7 @@ public class Tweet {
         return user;
     }
 
+    @NotNull
     public String getId() {
         return id;
     }

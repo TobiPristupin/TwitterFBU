@@ -11,16 +11,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.codepath.apps.restclienttemplate.databinding.ItemAccountBinding;
-import com.codepath.apps.restclienttemplate.databinding.ItemTweetBinding;
-import com.codepath.apps.restclienttemplate.models.Tweet;
 import com.codepath.apps.restclienttemplate.models.User;
-import com.codepath.apps.restclienttemplate.utils.DateUtils;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
@@ -60,7 +55,7 @@ public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHold
             binding = ItemAccountBinding.bind(itemView);
         }
 
-        private void bind(User user){
+        private void bind(User user) {
             Glide.with(context).load(user.getProfileImageUrl()).into(binding.accountProfileImage);
             binding.accountDescription.setText(user.getDescription());
             binding.accountUserAt.setText(String.format("@%s", user.getScreenName()));

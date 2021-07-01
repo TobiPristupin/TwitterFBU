@@ -1,10 +1,10 @@
 package com.codepath.apps.restclienttemplate;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.codepath.apps.restclienttemplate.databinding.ActivityProfileDetailBinding;
 import com.codepath.apps.restclienttemplate.models.User;
@@ -29,13 +29,13 @@ public class ProfileDetailActivity extends AppCompatActivity {
         getSupportActionBar().setTitle(user.getName());
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        binding.pager.setAdapter(new ProfileFragmentPagerAdapter(getSupportFragmentManager(), this, user));
+        binding.pager.setAdapter(new ProfileFragmentPagerAdapter(getSupportFragmentManager(), user));
         binding.tabLayout.setupWithViewPager(binding.pager);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;

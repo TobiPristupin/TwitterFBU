@@ -4,19 +4,21 @@ import android.content.Context;
 
 import androidx.room.Room;
 
+//Singleton class that contains a handle to the Room database
 public class TweetDatabaseProvider {
 
     private static TweetDatabase db = null;
 
-    private TweetDatabaseProvider(){}
+    private TweetDatabaseProvider() {
+    }
 
     private static void initializeDb(Context context) {
         TweetDatabaseProvider.db = Room.databaseBuilder(context.getApplicationContext(), TweetDatabase.class, "db-name")
                 .allowMainThreadQueries().fallbackToDestructiveMigration().build();
     }
 
-    public static TweetDatabase getInstance(Context context){
-        if (db == null){
+    public static TweetDatabase getInstance(Context context) {
+        if (db == null) {
             initializeDb(context);
         }
 

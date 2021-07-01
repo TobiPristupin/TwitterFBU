@@ -1,24 +1,21 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import android.os.Parcel;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.codepath.apps.restclienttemplate.databinding.FragmentFollowersBinding;
 import com.codepath.apps.restclienttemplate.models.TwitterApplication;
 import com.codepath.apps.restclienttemplate.models.TwitterClient;
 import com.codepath.apps.restclienttemplate.models.User;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
-import com.google.gson.JsonArray;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.parceler.Parcels;
 
@@ -39,6 +36,7 @@ public class FollowersFragment extends Fragment {
     private List<User> users;
     private ProfileAdapter adapter;
     private TwitterClient client;
+    private static final String TAG = "FollowersFragment";
 
     public FollowersFragment() {
         // Required empty public constructor
@@ -89,9 +87,9 @@ public class FollowersFragment extends Fragment {
     }
 
     private void fetchAccountsFromApi() {
-        if (state == State.SHOW_FOLLOWERS){
+        if (state == State.SHOW_FOLLOWERS) {
             fetchFollowers();
-        } else if (state == State.SHOW_FOLLOWING){
+        } else if (state == State.SHOW_FOLLOWING) {
             fetchFollowing();
         }
     }
@@ -100,6 +98,7 @@ public class FollowersFragment extends Fragment {
         client.getFollowers(user, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "Fetched followers");
                 try {
                     users.clear();
                     users.addAll(User.fromJsonArray(json.jsonObject.getJSONArray("users")));
@@ -111,7 +110,7 @@ public class FollowersFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                System.out.println(throwable);
+                Log.w(TAG, throwable);
             }
         });
     }
@@ -120,6 +119,7 @@ public class FollowersFragment extends Fragment {
         client.getFollowing(user, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JSON json) {
+                Log.i(TAG, "Fetched following");
                 try {
                     users.clear();
                     users.addAll(User.fromJsonArray(json.jsonObject.getJSONArray("users")));
@@ -131,7 +131,7 @@ public class FollowersFragment extends Fragment {
 
             @Override
             public void onFailure(int statusCode, Headers headers, String response, Throwable throwable) {
-                System.out.println(throwable);
+                Log.w(TAG, throwable);
             }
         });
     }
