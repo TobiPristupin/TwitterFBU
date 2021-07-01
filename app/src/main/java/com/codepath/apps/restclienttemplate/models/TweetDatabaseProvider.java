@@ -12,7 +12,7 @@ public class TweetDatabaseProvider {
 
     private static void initializeDb(Context context) {
         TweetDatabaseProvider.db = Room.databaseBuilder(context.getApplicationContext(), TweetDatabase.class, "db-name")
-                .allowMainThreadQueries().build();
+                .allowMainThreadQueries().fallbackToDestructiveMigration().build();
     }
 
     public static TweetDatabase getInstance(Context context){

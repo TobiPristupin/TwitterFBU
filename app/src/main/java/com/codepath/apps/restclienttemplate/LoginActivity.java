@@ -7,15 +7,12 @@ import android.view.Menu;
 import android.view.View;
 
 import com.codepath.apps.restclienttemplate.databinding.ActivityLoginBinding;
-import com.codepath.apps.restclienttemplate.models.SampleModel;
-import com.codepath.apps.restclienttemplate.models.SampleModelDao;
 import com.codepath.apps.restclienttemplate.models.TwitterApplication;
 import com.codepath.apps.restclienttemplate.models.TwitterClient;
 import com.codepath.oauth.OAuthLoginActionBarActivity;
 
 public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 
-	SampleModelDao sampleModelDao;
 	ActivityLoginBinding binding;
 	
 	@Override
@@ -26,18 +23,6 @@ public class LoginActivity extends OAuthLoginActionBarActivity<TwitterClient> {
 		setContentView(rootView);
 
 		setSupportActionBar(binding.loginToolbar);
-
-		final SampleModel sampleModel = new SampleModel();
-		sampleModel.setName("CodePath");
-
-		sampleModelDao = ((TwitterApplication) getApplicationContext()).getMyDatabase().sampleModelDao();
-
-		AsyncTask.execute(new Runnable() {
-			@Override
-			public void run() {
-				sampleModelDao.insertModel(sampleModel);
-			}
-		});
 	}
 
 

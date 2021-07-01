@@ -1,7 +1,6 @@
 package com.codepath.apps.restclienttemplate;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,8 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> {
 
     interface onTweetClickListener {
-        void onClick(int position);
+        void onTweetClick(int position);
+        void onProfileImageClick(int position);
     }
 
     private List<Tweet> tweets;
@@ -87,13 +87,8 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
                 binding.previewImage.setVisibility(View.GONE);
             }
 
-            binding.tweetItemRoot.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    clickListener.onClick(getAdapterPosition());
-                }
-            });
-
+            binding.tweetItemRoot.setOnClickListener(view -> clickListener.onTweetClick(getAdapterPosition()));
+            binding.profileImage.setOnClickListener(view -> clickListener.onProfileImageClick(getAdapterPosition()));
 
         }
     }

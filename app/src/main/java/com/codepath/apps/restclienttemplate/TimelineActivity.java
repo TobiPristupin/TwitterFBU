@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,11 +19,13 @@ import com.codepath.apps.restclienttemplate.models.TweetDao;
 import com.codepath.apps.restclienttemplate.models.TweetDatabaseProvider;
 import com.codepath.apps.restclienttemplate.models.TwitterApplication;
 import com.codepath.apps.restclienttemplate.models.TwitterClient;
+import com.codepath.apps.restclienttemplate.utils.EndlessRecyclerViewScrollListener;
 import com.codepath.asynchttpclient.callback.JsonHttpResponseHandler;
 
 import org.json.JSONException;
 import org.parceler.Parcels;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +39,7 @@ public class TimelineActivity extends AppCompatActivity {
     private List<Tweet> tweets;
     private TweetDao tweetDao;
     private static final int REQUEST_CODE = 999;
-
+    private BigInteger minTweetId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         initViews();
 
-        fetchFromApiToCache(0);
+        fetchFromApiToCache(null);
     }
 
     @Override
@@ -63,8 +66,8 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     //Fetches tweets from API, displays them on the timeline, and caches the results in room db
-    private void fetchFromApiToCache(int page) {
-        client.getHomeTimeline(page, new JsonHttpResponseHandler() {
+    private void fetchFromApiToCache(String minTweetId) {
+        client.getHomeTimeline(minTweetId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Headers headers, JsonHttpResponseHandler.JSON json) {
                 try {
@@ -98,6 +101,15 @@ public class TimelineActivity extends AppCompatActivity {
         tweets.clear();
         tweets.addAll(tweetDao.getAll());
         adapter.notifyDataSetChanged();
+        updateMinTweetId();
+    }
+
+    private void updateMinTweetId(){
+        BigInteger smallest = new BigInteger("0");
+        for (Tweet t : tweets){
+            smallest = smallest.max(new BigInteger(t.getId()));
+        }
+        minTweetId = smallest;
     }
 
     private void initViews() {
@@ -109,11 +121,16 @@ public class TimelineActivity extends AppCompatActivity {
     private void initRecyclerView() {
         binding.timelineProgressBar.setVisibility(View.VISIBLE);
 
-        adapter = new TweetAdapter(tweets, this, position -> {
-            Tweet tweet = tweets.get(position);
-            Intent i = new Intent(TimelineActivity.this, DetailTweetActivity.class);
-            i.putExtra("tweet", Parcels.wrap(tweet));
-            startActivity(i);
+        adapter = new TweetAdapter(tweets, this, new TweetAdapter.onTweetClickListener() {
+            @Override
+            public void onTweetClick(int position) {
+                TimelineActivity.this.onTweetClick(position);
+            }
+
+            @Override
+            public void onProfileImageClick(int position) {
+                TimelineActivity.this.onProfileImageClick(position);
+            }
         });
         binding.timelineRecyclerview.setAdapter(adapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -121,11 +138,30 @@ public class TimelineActivity extends AppCompatActivity {
         DividerItemDecoration divider = new DividerItemDecoration(binding.timelineRecyclerview.getContext(),
                 layoutManager.getOrientation());
         binding.timelineRecyclerview.addItemDecoration(divider);
+
+        binding.timelineRecyclerview.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                System.out.println("fetching more!!");
+                fetchFromApiToCache(minTweetId.subtract(new BigInteger("1")).toString());
+            }
+        });
+    }
+
+    private void onTweetClick(int position) {
+        Tweet tweet = tweets.get(position);
+        Intent i = new Intent(TimelineActivity.this, DetailTweetActivity.class);
+        i.putExtra("tweet", Parcels.wrap(tweet));
+        startActivity(i);
+    }
+
+    private void onProfileImageClick(int position) {
+
     }
 
     private void initSwipeRefresh(){
         binding.swipeRefreshLayout.setOnRefreshListener(() -> {
-            fetchFromApiToCache(0);
+            fetchFromApiToCache(null);
         });
     }
 
