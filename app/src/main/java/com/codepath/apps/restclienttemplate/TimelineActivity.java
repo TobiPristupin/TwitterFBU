@@ -113,9 +113,12 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void updateMinTweetId() {
-        BigInteger smallest = new BigInteger("0");
+        BigInteger smallest = null;
         for (Tweet t : tweets) {
-            smallest = smallest.max(new BigInteger(t.getId()));
+            BigInteger id = new BigInteger(t.getId());
+            if (smallest == null || id.compareTo(smallest) < 0){
+                smallest = id;
+            }
         }
         minTweetId = smallest;
     }
@@ -194,8 +197,8 @@ public class TimelineActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             Tweet newTweet = (Tweet) Parcels.unwrap(data.getParcelableExtra("tweet"));
-            tweets.add(0, newTweet);
-            adapter.notifyItemInserted(0);
+            tweetDao.insert(newTweet);
+            populateHomeTimelineFromCache();
             binding.timelineRecyclerview.smoothScrollToPosition(0);
         }
         super.onActivityResult(requestCode, resultCode, data);

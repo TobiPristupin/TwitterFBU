@@ -65,4 +65,17 @@ public class DateUtils {
         return "";
     }
 
+    public static long twitterFormatToUnix(String createdAt){
+        String twitterFormat = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+        SimpleDateFormat sf = new SimpleDateFormat(twitterFormat, Locale.ENGLISH);
+        sf.setLenient(true);
+        try {
+            return sf.parse(createdAt).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        throw new RuntimeException("Unreachable");
+    }
+
 }

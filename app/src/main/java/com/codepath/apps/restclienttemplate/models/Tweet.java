@@ -5,6 +5,8 @@ import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.codepath.apps.restclienttemplate.utils.DateUtils;
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,12 +30,14 @@ public class Tweet {
     private int retweetCount;
     private int favoriteCount;
     private List<String> imageUrls;
+    private long unixTime;
 
     public Tweet() {
         //empty constructor required for Parcel
     }
 
-    public Tweet(String body, String createdAt, User user, @NotNull String id, List<String> imageUrls, int retweetCount, int favoriteCount) {
+    //TODO: This huge constructor could be improved by using the Builder design pattern
+    public Tweet(String body, String createdAt, User user, @NotNull String id, List<String> imageUrls, int retweetCount, int favoriteCount, long unixTime) {
         this.body = body;
         this.createdAt = createdAt;
         this.user = user;
@@ -41,6 +45,7 @@ public class Tweet {
         this.imageUrls = imageUrls;
         this.retweetCount = retweetCount;
         this.favoriteCount = favoriteCount;
+        this.unixTime = unixTime;
     }
 
     public static Tweet fromJson(JSONObject json) throws JSONException {
@@ -52,6 +57,9 @@ public class Tweet {
             }
         }
 
+        String createdAt = json.getString("created_at");
+        long unix = DateUtils.twitterFormatToUnix(createdAt);
+
         return new Tweet(
                 json.getString("text"),
                 json.getString("created_at"),
@@ -59,7 +67,8 @@ public class Tweet {
                 json.getString("id_str"),
                 imageUrls,
                 json.getInt("retweet_count"),
-                json.getInt("favorite_count")
+                json.getInt("favorite_count"),
+                unix
         );
     }
 
@@ -126,5 +135,13 @@ public class Tweet {
 
     public void setImageUrls(List<String> imageUrls) {
         this.imageUrls = imageUrls;
+    }
+
+    public long getUnixTime() {
+        return unixTime;
+    }
+
+    public void setUnixTime(long unixTime) {
+        this.unixTime = unixTime;
     }
 }

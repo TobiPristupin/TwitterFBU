@@ -11,7 +11,7 @@ import java.util.List;
 @Dao
 public interface TweetDao {
 
-    @Query("SELECT * FROM tweets")
+    @Query("SELECT * FROM tweets ORDER BY unixTime DESC")
     List<Tweet> getAll();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -25,4 +25,7 @@ public interface TweetDao {
 
     @Query("SELECT COUNT(id) FROM tweets")
     int getNumberOfRows();
+
+    @Insert()
+    void insert(Tweet tweet);
 }
