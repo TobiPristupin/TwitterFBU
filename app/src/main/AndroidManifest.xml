@@ -13,10 +13,11 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".DetailTweetActivity"></activity>
+        <activity android:name=".ProfileDetailActivity"></activity>
+        <activity android:name=".DetailTweetActivity" />
         <activity
             android:name=".ComposeTweetActivity"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity android:name=".TimelineActivity" />
         <activity
             android:name=".LoginActivity"

@@ -156,7 +156,9 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void onProfileImageClick(int position) {
-
+        Intent i = new Intent(TimelineActivity.this, ProfileDetailActivity.class);
+        i.putExtra("profile", Parcels.wrap(tweets.get(position).getUser()));
+        startActivity(i);
     }
 
     private void initSwipeRefresh(){
