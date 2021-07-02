@@ -102,6 +102,7 @@ public class FollowersFragment extends Fragment {
                 try {
                     users.clear();
                     users.addAll(User.fromJsonArray(json.jsonObject.getJSONArray("users")));
+                    binding.followersProgressBar.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -123,6 +124,7 @@ public class FollowersFragment extends Fragment {
                 try {
                     users.clear();
                     users.addAll(User.fromJsonArray(json.jsonObject.getJSONArray("users")));
+                    binding.followersProgressBar.setVisibility(View.GONE);
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();

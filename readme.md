@@ -55,6 +55,13 @@ Here's a walkthrough of implemented user stories:
 
 <img src='walkthrough_twitter.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
+Here's a walkthrough of the indeterminate progress indicator.
+
+<img src='walkthrough_progressbar.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+
+The original walkthrough gif contains a progress indicator that shows before loading tweets. However, since those tweets are cached in Room and loaded very quickly,
+ the indicator immediately disappears and can't be seen in the gif (it can be seen when running in a real device). I received an email saying that I had not implemented the loading indicator feature, so I added a loading indicator to the Followers/Following page of my app. This page does not cache results, so the indicator can be seen.
+
 ## Notes
 
 Describe any challenges encountered while building the app.
