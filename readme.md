@@ -1,9 +1,3 @@
-additional features:
-    viewbinding
-    UI design
-    view automatically shifts up when typing
-   
-
 # Project 3 - *Twitter*
 
 **TwitterTobi** is an android app that allows a user to view their Twitter timeline and post a new tweet. The app utilizes [Twitter REST API](https://dev.twitter.com/rest/public).
@@ -55,7 +49,8 @@ Here's a walkthrough of implemented user stories:
 
 <img src='walkthrough_twitter.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-Here's a walkthrough of the indeterminate progress indicator.
+
+Walkthrough of loading indicator:
 
 <img src='walkthrough_progressbar.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
@@ -90,3 +85,8 @@ Managing the Room database in conjunction with the API and keeping all data up t
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+    
+    
+    
+
+    
